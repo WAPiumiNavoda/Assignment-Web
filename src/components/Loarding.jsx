@@ -16,7 +16,7 @@ const Loarding = ({size = 100}) => {
         height: size,
      }}
     >
-      <span className="visually-hidden">Loading...</span>
+      <span className="visually-hidden">Loarding</span>
     </Spinner>
     </div>
   )

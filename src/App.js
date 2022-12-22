@@ -1,7 +1,7 @@
 import React from 'react'
 import {BrowserRouter as Router, Route,Routes } from 'react-router-dom'
 import LandingPage from './screens/LandingPage/LandingPage'
-import { MyNotes } from './screens/MyNotes/MyNotes'
+import MyNotes from './screens/MyNotes/MyNotes'
 import Footer from './components/Footer/Footer'
 import Header from './components/Header/Header'
 import LoginPage from './screens/LoginPage/LoginPage'

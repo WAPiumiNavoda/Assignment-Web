@@ -85,3 +85,5 @@ export const MyNotes = () => {
     </MainScreen>
   )
 }
+
+export default MyNotes;
