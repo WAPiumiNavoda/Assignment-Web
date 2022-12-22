@@ -1,5 +1,5 @@
 import React from 'react'
-import {BrowserRouter as Router, Route,Routes } from 'react-router-dom'
+import {BrowserRouter, Route,Routes } from 'react-router-dom'
 import LandingPage from './screens/LandingPage/LandingPage'
 import MyNotes from './screens/MyNotes/MyNotes'
 import Footer from './components/Footer/Footer'
@@ -10,16 +10,16 @@ import RegisterPage from './screens/RegisterPage/RegisterPage'
 function App() {
   return (
     <>
-      <Router>
+      <BrowserRouter>
         <Header />
-        <Routes>
-          <Route path="/" element={<LandingPage />} />   
-          <Route path="/login" element={<LoginPage />} />   
-          <Route path="/register" element={<RegisterPage />} />   
-          <Route path="/mynotes" element={<MyNotes />} />
-        </Routes>
+        <main>
+          <Route path="/" component={LandingPage} exact />   
+          <Route path="/login" component={LoginPage} />   
+          <Route path="/register" component={RegisterPage } />   
+          <Route path="/mynotes" component={MyNotes } />
+        </main>
         <Footer />
-       </Router>
+       </BrowserRouter>
     </>
   )
 }

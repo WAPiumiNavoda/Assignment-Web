@@ -23,11 +23,11 @@ const { loading,error,userInfo} = userLogin;
 
 useEffect(() => {
   if(userInfo){
-    history.push('/mynotes')
+    history.push('/mynotes');
   }
 }, [history,userInfo]);
 
-
+console.log(userInfo);
 const submitHandler =async (e) =>{
    e.preventDefault();
    dispatch(login(email,password));

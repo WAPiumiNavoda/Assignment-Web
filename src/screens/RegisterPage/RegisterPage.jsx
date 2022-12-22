@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import MainScreen from '../../components/MainScreen'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
 import ErrorMessage from '../../components/ErrorMessage';
-import axios from 'axios';
 import Loarding from '../../components/Loarding';
+import { useDispatch, useSelector } from 'react-redux';
+import { register } from '../../actions/userActions';
 
-const RegisterPage = () => {
+const RegisterPage = ({history}) => {
 
  //useStates
  const [email,setEmail] = useState("");
@@ -17,34 +17,28 @@ const RegisterPage = () => {
  const [confirmpassword,setConfirmPassword]= useState("");
  const [message,setMessage]= useState(null);
  const [picMessage,setPicMessage]= useState(null);
- const [error,setError]=useState(false);
- const [loading,setLoading] = useState(false);
+
+ const dispatch = useDispatch();
+ const userRegister = useSelector((state)=> state.userRegister);
+ const { loading,error,userInfo}= userRegister;
+
+
+ //back to mynotepage
+ useEffect(() => {
+   if(userInfo){
+  history.push('/mynotes')
+ }
+ }, [history,userInfo])
+ 
 
  const registerHandler= async (e)=>{
    e.preventDefault();
-//    console.log(email);
-if(password !==confirmpassword){
-    setMessage('Password Do not Match');
-}else{
-  setMessage(null)
-  try {
-    const config = {
-        headers:{
-            "Content-type":"application/json"
-        },
-    };
-    setLoading(true);
-    const { data } = await axios.post(
-        "/api/users",
-        {name,pic,email,password},
-        config
-    );
-    setLoading(false);
-    localStorage.setItem("useInfo",JSON.stringify(data));
-  } catch (error) {
-    setError(error.response.data.message);
-  }
-}
+    
+   if(password !== confirmpassword){
+    setMessage('Password do not match')
+   }else{
+    dispatch(register(name,email,password,pic))
+   }
  }
 
   return (
