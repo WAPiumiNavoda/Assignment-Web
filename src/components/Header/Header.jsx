@@ -10,7 +10,7 @@ import { logout } from '../../actions/userActions';
 
 
 
-const Header = () => {
+const Header = ({setSearch}) => {
   const history = useHistory();
   const dispatch =useDispatch();
   const userLogin = useSelector(state =>state.userLogin);
@@ -36,6 +36,7 @@ const Header = () => {
             <Form.Control
               type="search"
               placeholder="Search"
+              onChange={(e)=> setSearch(e.target.value)}
               className="me-2"
               aria-label="Search"
             />

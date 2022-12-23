@@ -1,31 +1,53 @@
-import React ,{useEffect, useState}from 'react'
+import React ,{ useEffect }from 'react'
 import MainScreen from '../../components/MainScreen'
-import { Link } from 'react-router-dom';
+import { Link,useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/esm/Button';
 import Card from 'react-bootstrap/Card';
-// import notes, {} from '../../Data/notes'
-import axios from 'axios';
+import { useDispatch,useSelector } from 'react-redux'
+import { deleteNoteAction, listNotes } from '../../actions/notesAction';
+import Loading from '../../components/Loarding'
+import ErrorMessage from '../../components/ErrorMessage'
+
+export const MyNotes = ({search}) => {
+ 
+  const history  = useHistory();
+ const dispatch = useDispatch();
+ const noteList = useSelector((state) => state.noteList);
+ const { loading,notes,error} = noteList;
+
+ const userLogin = useSelector(state =>state.userLogin)
+ const {userInfo } = userLogin;
+
+ /*after adding for it suddenly show in note page*/
+ const noteCreate = useSelector((state) =>state.noteCreate);
+ const { success: successCreate} = noteCreate;
+
+  /*after adding for it suddenly show in note page*/
+ const noteUpdate = useSelector((state) =>state.noteUpdate);
+ const { success: successUpdate} = noteUpdate;
+
+  const noteDelete = useSelector((state) =>state.noteDelete);
+ const { 
+  loading: loadingDelete, 
+  error:errorDelete, 
+  success:successDelete} = noteDelete;
 
 
-export const MyNotes = () => {
-
-  const [notes, setNotes] = useState([]);
+  // const [notes, setNotes] = useState([]);
 
   const deleteHandler = (id)=>{
      if(window.confirm("Are you sure?")){
-
+         dispatch(deleteNoteAction(id));
      }
   }
 
-   const fetchNotes = async() =>{
-    const { data } = await axios.get("/api/notes");
-    setNotes(data);
-    console.log(data);
- };
-
+ 
   useEffect(()=>{
-   fetchNotes();
-  },[]);
+   dispatch(listNotes());
+   if(!userInfo){
+    history.push('/');
+   }
+  },[dispatch, successCreate,successUpdate,successDelete,history,userInfo]);
 
   // useEffect(() => {
   //       axios.get("http://localhost:5000/api/notes").then(res => {
@@ -35,12 +57,15 @@ export const MyNotes = () => {
   //       }, [])
 
   return (
-    <MainScreen titles='Welcome to Book store'>
-      <Link to='/create'>
+    <MainScreen titles={`Welcome back ${userInfo.name}..`}>
+      <Link to='/createnotes'>
         <Button style={{marginLeft: 20, marginBottom: 6}} size="lg">Create New Note</Button>
        </Link>
+       {errorDelete && (<ErrorMessage variant='danger'>{errorDelete}</ErrorMessage>)}
+       {error && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
+       {loading && <Loading/>}
         {
-          notes.map(note => (
+          notes?.map(note => (
              <Card>
       <Card.Header style={{display:'flex'}}>
         <span style={{
@@ -73,7 +98,10 @@ export const MyNotes = () => {
             {note.content}
           </p>
           <footer className="blockquote-footer">
-            Created On -date
+            Created On -date {" "}
+            <cite title='Source Title'>
+              {note.createdAt.substring(0,10)}
+            </cite>
           </footer>
         </blockquote>
      </Card.Body>
